@@ -63,8 +63,6 @@
                             <goal>proguard</goal>
                         </goals>
                         <configuration>
-                            <proguardVersion>5.3.1</proguardVersion>
-                            <obfuscate>true</obfuscate>
                             <outjar>${project.build.finalName}-small.jar</outjar>
                             <options>
                                 <option>-allowaccessmodification</option>
