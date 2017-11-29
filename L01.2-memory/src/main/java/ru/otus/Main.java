@@ -2,10 +2,13 @@ package ru.otus;
 
 import ru.otus.util.ObjMemCalculator;
 
+import java.lang.management.ManagementFactory;
+
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         String f = "%-35s%17d%n";
         System.out.println("<<<<<<<<<<<<<<<<<<<<MEMORY_STAND>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("pid: " + ManagementFactory.getRuntimeMXBean().getName());
         System.out.printf("%-35s%17s%n%n", "OBJECT", "BYTES");
 
         ObjMemCalculator calculator = new ObjMemCalculator(() -> new String(new char[0]));
@@ -36,9 +39,9 @@ public class Main {
         System.out.printf(f, "Integer: ", calculator.getObjectSize());
 
         calculator.setObjectCreator(() -> new MyClass<>(new Object()));
-        System.out.printf(f, "MyClass<T1> : ", calculator.getObjectSize());
+        System.out.printf(f, "MyClass<T1>: ", calculator.getObjectSize());
 
         calculator.setObjectCreator(() -> new MyClass2<>(new Object(), new Integer(1)));
-        System.out.printf(f, "MyClass2<T1, T2> : ", calculator.getObjectSize());
+        System.out.printf(f, "MyClass2<T1, T2>: ", calculator.getObjectSize());
     }
 }
