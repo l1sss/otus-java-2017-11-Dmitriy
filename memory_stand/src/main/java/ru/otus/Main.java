@@ -4,6 +4,7 @@ import ru.otus.util.ObjMemCalculator;
 
 import java.lang.management.ManagementFactory;
 
+//VM options: -Xmx512m -Xms512m
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         String f = "%-35s%17d%n";

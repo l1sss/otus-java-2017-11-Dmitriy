@@ -3,12 +3,12 @@ package ru.otus.util;
 import java.util.function.Supplier;
 
 public class ObjMemCalculator {
-    private static final int ARRAY_SIZE = 2_000_000;
+    private static final int ARRAY_SIZE = 5_000_000;
     private static final int SLEEP_TIME = 100;
-    private Supplier supplier;
+    private Supplier objectCreator;
 
     public ObjMemCalculator(Supplier supplier) {
-        this.supplier = supplier;
+        this.objectCreator = supplier;
     }
 
     public long getObjectSize() throws InterruptedException {
@@ -23,7 +23,7 @@ public class ObjMemCalculator {
         before = rt.totalMemory() - rt.freeMemory();
 
         for (int i = 0; i < ARRAY_SIZE; i++)
-            obj[i] = supplier.get();
+            obj[i] = objectCreator.get();
 
         after = rt.totalMemory() - rt.freeMemory();
 
@@ -31,6 +31,6 @@ public class ObjMemCalculator {
     }
 
     public void setObjectCreator(Supplier supplier) {
-        this.supplier = supplier;
+        this.objectCreator = supplier;
     }
 }
