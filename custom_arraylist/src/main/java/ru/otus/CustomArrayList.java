@@ -33,7 +33,7 @@ public class CustomArrayList<E> implements List<E> {
     private void checkCapacity(int minCapacity) {
         modCount++;
         if (minCapacity > elementData.length)
-            grow(minCapacity);
+            grow();
     }
 
     private void rangeCheck(int index) {
@@ -50,7 +50,7 @@ public class CustomArrayList<E> implements List<E> {
         return "Index: " + index + ", Size: " + size;
     }
 
-    private void grow(int minCapacity) {
+    private void grow() {
         int oldCapacity = elementData.length;
         int newCapacity = oldCapacity + (oldCapacity >> 1);
 
