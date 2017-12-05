@@ -167,13 +167,29 @@ public class CustomArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new CustomItr();
+        return new CustomListItr(0);
     }
 
-    private class CustomItr implements Iterator<E> {
+    @Override
+    public ListIterator<E> listIterator() {
+        return new CustomListItr(0);
+    }
+
+    @Override
+    public ListIterator<E> listIterator(int index) {
+        if (index < 0 || index > size)
+            throw new IndexOutOfBoundsException("Index: " + index);
+        return new CustomListItr(index);
+    }
+
+    private class CustomListItr implements ListIterator<E> {
         int cursor;
         int lastRet = -1;
         long expectedModCount = modCount;
+
+        CustomListItr(int index) {
+            cursor = index;
+        }
 
         @Override
         public boolean hasNext() {
@@ -199,52 +215,8 @@ public class CustomArrayList<E> implements List<E> {
         }
 
         @Override
-        public void remove() {
-            //TODO
-        }
-
-        @Override
-        public void forEachRemaining(Consumer<? super E> action) {
-            //TODO
-        }
-
-        void checkMod() {
-            if (modCount != expectedModCount)
-                throw new ConcurrentModificationException();
-        }
-    }
-
-    @Override
-    public ListIterator<E> listIterator() {
-        return new CustomListItr(0);
-    }
-
-    @Override
-    public ListIterator<E> listIterator(int index) {
-        if (index < 0 || index > size)
-            throw new IndexOutOfBoundsException("Index: " + index);
-        return new CustomListItr(index);
-    }
-
-    private class CustomListItr extends CustomItr implements ListIterator<E> {
-        CustomListItr(int index) {
-            super();
-            cursor = index;
-        }
-
-        @Override
         public boolean hasPrevious() {
             return cursor != 0;
-        }
-
-        @Override
-        public int nextIndex() {
-            return cursor;
-        }
-
-        @Override
-        public int previousIndex() {
-            return cursor - 1;
         }
 
         @Override
@@ -263,6 +235,21 @@ public class CustomArrayList<E> implements List<E> {
 
             //noinspection unchecked
             return (E) elementData[lastRet = i];
+        }
+
+        @Override
+        public int nextIndex() {
+            return cursor;
+        }
+
+        @Override
+        public int previousIndex() {
+            return cursor - 1;
+        }
+
+        @Override
+        public void remove() {
+            //TODO
         }
 
         @Override
@@ -291,6 +278,16 @@ public class CustomArrayList<E> implements List<E> {
             } catch (IndexOutOfBoundsException ex) {
                 throw new ConcurrentModificationException();
             }
+        }
+
+        @Override
+        public void forEachRemaining(Consumer<? super E> action) {
+            //TODO
+        }
+
+        void checkMod() {
+            if (modCount != expectedModCount)
+                throw new ConcurrentModificationException();
         }
     }
 
