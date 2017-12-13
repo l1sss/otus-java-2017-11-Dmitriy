@@ -1,4 +1,4 @@
-package ru.otus;
+package ru.otus.util;
 
 import java.util.Stack;
 
@@ -9,8 +9,6 @@ public class MemoryEater {
         Stack<String> stack = new Stack<>();
 
         System.out.println("Start eat memory!");
-        long start = System.currentTimeMillis();
-        long finish = 0;
 
         while (true) {
             for (int i = 0; i < objsInSecond; i++) {
@@ -21,10 +19,6 @@ public class MemoryEater {
             }
 
             Thread.sleep(1000);
-
-            finish = (System.currentTimeMillis() - start) / 1000;
-            if (finish % 10 == 0)
-                System.out.println(finish + " sec spent");
         }
     }
 }
