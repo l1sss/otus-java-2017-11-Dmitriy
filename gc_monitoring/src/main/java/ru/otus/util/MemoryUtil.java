@@ -11,7 +11,6 @@ import java.lang.management.*;
 import java.util.HashMap;
 import java.util.Map;
 
-//big thanks Андрей Лыгин @alygin https://habrahabr.ru/post/269621/
 public class MemoryUtil {
     private static final int NORM_NAME_LENGTH = 25;
     private static final long SIZE_KB = 1024;
@@ -138,3 +137,6 @@ public class MemoryUtil {
     }
 }
 
+/**
+ * big thanks Андрей Лыгин @alygin https://habrahabr.ru/post/269621/
+ */
