@@ -77,7 +77,7 @@ class ReflectionHelper {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             if (e.getTargetException() instanceof TestError)
-                throw new TestError();
+                throw new TestError(e.getTargetException().getMessage());
             else
                 e.printStackTrace();
         } finally {

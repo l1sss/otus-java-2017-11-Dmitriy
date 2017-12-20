@@ -1,25 +1,20 @@
 package ru.otus.testrunner;
 
+import com.google.common.reflect.ClassPath;
 import ru.otus.testrunner.annotations.After;
 import ru.otus.testrunner.annotations.Before;
 import ru.otus.testrunner.annotations.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class TestRunner {
     private TestRunner() {
     }
 
-    public static <T> void runClassTest(Class<T> clazz) {
-        T instance = ReflectionHelper.instantiate(clazz);
+    public static void runTestsFromClass(Class<?> clazz) {
         System.out.println("RUN : " + clazz.getName());
 
         List<Method> before = new ArrayList<>();
@@ -33,41 +28,40 @@ public class TestRunner {
         }
 
         for (Method t : tests) {
+            Object instance = ReflectionHelper.instantiate(clazz);
+
             for (Method b : before)
                 ReflectionHelper.callMethod(instance, b.getName());
 
-            callTest(instance, t.getName());
+            invokeTest(instance, t.getName());
 
             for (Method a : after)
                 ReflectionHelper.callMethod(instance, a.getName());
         }
     }
 
-    public static void loadPackageClasses(String packageName) throws IOException {
-        Path source = Paths.get(packageName);
-        System.out.println("LOAD : " + source);
+    public static void loadClassesFromPackage(String packageName) {
+        final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-        List<Path> classPaths = Files.list(source)
-                .filter(path -> path.toString().endsWith(".class"))
-                .collect(Collectors.toList());
-
-        MyClassLoader cl = new MyClassLoader();
+        ClassPath classpath = null;
         try {
-            for (Path p : classPaths) {
-                Class clazz = cl.findClass(p.toString());
-                runClassTest(clazz);
-            }
-        } catch (ClassNotFoundException e) {
+            classpath = ClassPath.from(classLoader);
+        } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
+
+        for (ClassPath.ClassInfo classInfo : classpath.getTopLevelClasses(packageName))
+            runTestsFromClass(classInfo.load());
     }
 
-    private static void callTest(Object object, String name) {
+    private static void invokeTest(Object object, String name) {
         try {
             ReflectionHelper.callMethod(object, name);
             System.out.println(name + " - DONE");
         } catch (TestError e) {
             System.out.println(name + " - FAILED");
+            System.out.println(e.getMessage());
         }
     }
 }
