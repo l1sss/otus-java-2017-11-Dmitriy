@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         //TestRunner.runTestsFromClass(TestClass.class);
 
-        String pathToPackage = "ru.otus.testclass";
-        TestRunner.loadClassesFromPackage(pathToPackage);
+        String pack = "ru.otus.testclass";
+        TestRunner.loadClassesFromPackage(pack);
     }
 }
