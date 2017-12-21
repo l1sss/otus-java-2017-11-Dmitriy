@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
+//Main class: org.openjdk.jmh.Main
+
 @Fork(1)
 @Warmup(iterations = 10)
 @BenchmarkMode(Mode.AverageTime)
