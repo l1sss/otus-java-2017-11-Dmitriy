@@ -41,7 +41,7 @@ public class TestATM {
         assertEquals(1, withdrawal.get(Denomination.FIVE_HUNDRED).intValue());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = ATMException.class)
     public void throwExceptionWhenAmountCanNotWithdraw() {
         atm.deposit(Denomination.FIVE_THOUSAND, 1);
         atm.withdraw(300);

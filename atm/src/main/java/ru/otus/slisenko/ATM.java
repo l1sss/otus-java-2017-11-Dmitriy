@@ -32,7 +32,7 @@ public class ATM {
         }
 
         if (remain > 0)
-            throw new RuntimeException(String.format("Can not dispense amount %d by dispenser %s", amount, dispensers));
+            throw new ATMException(String.format("Can not dispense amount %d by dispenser %s", amount, dispensers));
 
         withdrawal.forEach((denomination, notesDispensed) ->
             dispensers.compute(denomination, (key, notes) -> notes - notesDispensed));
