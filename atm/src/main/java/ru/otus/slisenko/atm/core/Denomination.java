@@ -1,4 +1,4 @@
-package ru.otus.slisenko;
+package ru.otus.slisenko.atm.core;
 
 public enum Denomination {
     FIVE_THOUSAND(5000),
