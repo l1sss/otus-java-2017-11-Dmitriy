@@ -19,7 +19,8 @@ public class ATMImp implements ATM {
 
     @Override
     public void deposit(Denomination denomination, int notes) {
-        dispensers.put(denomination, notes);
+        int totalNotes = dispensers.getOrDefault(denomination, 0) + notes;
+        dispensers.put(denomination, totalNotes);
     }
 
     @Override

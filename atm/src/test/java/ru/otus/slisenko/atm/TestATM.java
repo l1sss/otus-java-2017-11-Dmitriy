@@ -37,8 +37,9 @@ public class TestATM {
         atm.deposit(Denomination.FIVE_HUNDRED, 2);
         atm.deposit(Denomination.ONE_THOUSAND, 1);
         atm.deposit(Denomination.FIVE_THOUSAND, 2);
+        atm.deposit(Denomination.ONE_HUNDRED, 1);
 
-        assertEquals(12300, atm.getBalance());
+        assertEquals(12400, atm.getBalance());
     }
 
     @Test
