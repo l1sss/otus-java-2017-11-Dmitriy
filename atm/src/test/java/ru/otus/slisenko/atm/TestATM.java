@@ -64,12 +64,15 @@ public class TestATM {
     @Test
     public void checkBalanceAfterFailWithdraw() {
         atm.deposit(Denomination.FIVE_THOUSAND, 1);
+        atm.deposit(Denomination.FIVE_HUNDRED, 1);
+        atm.deposit(Denomination.ONE_HUNDRED, 4);
+        assertEquals(5900, atm.getBalance());
         try {
             atm.withdraw(1000);
         } catch (RuntimeException e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(5000, atm.getBalance());
+        assertEquals(5900, atm.getBalance());
     }
 
     @Test
