@@ -1,6 +1,6 @@
 package ru.otus.slisenko.atm.core;
 
-import ru.otus.slisenko.atm.exception.ATMException;
+import ru.otus.slisenko.atm.exceptions.ATMException;
 
 import java.util.HashMap;
 import java.util.Map;

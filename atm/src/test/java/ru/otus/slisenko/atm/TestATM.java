@@ -5,7 +5,7 @@ import org.junit.Test;
 import ru.otus.slisenko.atm.core.ATM;
 import ru.otus.slisenko.atm.core.Denomination;
 import ru.otus.slisenko.atm.core.ATMImp;
-import ru.otus.slisenko.atm.exception.ATMException;
+import ru.otus.slisenko.atm.exceptions.ATMException;
 
 import java.util.HashMap;
 import java.util.Map;

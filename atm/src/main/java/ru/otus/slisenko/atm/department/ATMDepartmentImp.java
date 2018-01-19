@@ -1,7 +1,8 @@
 package ru.otus.slisenko.atm.department;
 
 import ru.otus.slisenko.atm.core.ATM;
-import ru.otus.slisenko.atm.exception.ATMException;
+import ru.otus.slisenko.atm.exceptions.ATMException;
+import ru.otus.slisenko.atm.exceptions.DepartmentException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class ATMDepartmentImp implements ATMDepartment {
     @Override
     public void removeATM(String id) {
         if (park.remove(id) == null)
-            throw new ATMException(String.format("ATM with serial number \"%s\" is not registered in department", id));
+            throw new DepartmentException(String.format("ATM with serial number \"%s\" is not registered in department", id));
     }
 
     @Override

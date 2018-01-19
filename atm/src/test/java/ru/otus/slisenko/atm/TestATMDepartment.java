@@ -7,6 +7,8 @@ import ru.otus.slisenko.atm.core.Denomination;
 import ru.otus.slisenko.atm.core.ATMImp;
 import ru.otus.slisenko.atm.department.ATMDepartment;
 import ru.otus.slisenko.atm.department.ATMDepartmentImp;
+import ru.otus.slisenko.atm.exceptions.ATMException;
+import ru.otus.slisenko.atm.exceptions.DepartmentException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +45,17 @@ public class TestATMDepartment {
         department.removeATM(atm1.getId());
 
         assertEquals(1, department.getParkSize());
+    }
+
+    @Test(expected = DepartmentException.class)
+    public void removeUnregisteredATM() {
+        ATM atm1 = new ATMImp();
+        department.addATM(atm1);
+
+        ATM atm2 = new ATMImp();
+        department.addATM(atm2);
+
+        department.removeATM("1515");
     }
 
     @Test
