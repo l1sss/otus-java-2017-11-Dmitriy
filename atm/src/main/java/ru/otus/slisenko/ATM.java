@@ -28,7 +28,7 @@ public class ATM {
                 int notesNeeded = remain / denomination.getValue();
                 int notesToDispense = Math.min(notes, notesNeeded);
                 withdrawal.put(denomination, notesToDispense);
-                remain -= denomination.getValue() * notesNeeded;
+                remain -= denomination.getValue() * notesToDispense;
             }
         }
 
