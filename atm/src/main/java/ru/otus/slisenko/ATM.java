@@ -7,7 +7,8 @@ public class ATM {
     private Map<Denomination, Integer> dispensers = new HashMap<>();
 
     public void deposit(Denomination denomination, int notes) {
-        dispensers.put(denomination, notes);
+        int totalNotes = dispensers.getOrDefault(denomination, 0) + notes;
+        dispensers.put(denomination, totalNotes);
     }
 
     public int getBalance() {

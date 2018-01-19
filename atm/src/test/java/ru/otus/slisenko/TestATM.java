@@ -26,7 +26,9 @@ public class TestATM {
         atm.deposit(Denomination.FIVE_HUNDRED, 2);
         atm.deposit(Denomination.ONE_THOUSAND, 1);
         atm.deposit(Denomination.FIVE_THOUSAND, 2);
-        assertEquals(12300, atm.getBalance());
+        atm.deposit(Denomination.ONE_HUNDRED, 1);
+
+        assertEquals(12400, atm.getBalance());
     }
 
     @Test
@@ -35,7 +37,9 @@ public class TestATM {
         atm.deposit(Denomination.ONE_THOUSAND, 5);
         atm.deposit(Denomination.FIVE_HUNDRED, 1);
         atm.deposit(Denomination.ONE_HUNDRED, 5);
+
         Map<Denomination, Integer> withdrawal = atm.withdraw(5500);
+
         assertEquals(5500, atm.getBalance());
         assertEquals(1, withdrawal.get(Denomination.FIVE_THOUSAND).intValue());
         assertEquals(1, withdrawal.get(Denomination.FIVE_HUNDRED).intValue());
