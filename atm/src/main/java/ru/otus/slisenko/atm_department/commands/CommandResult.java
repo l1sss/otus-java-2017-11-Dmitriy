@@ -1,4 +1,4 @@
-package ru.otus.slisenko.atm.commands;
+package ru.otus.slisenko.atm_department.commands;
 
 public class CommandResult {
     private int result;

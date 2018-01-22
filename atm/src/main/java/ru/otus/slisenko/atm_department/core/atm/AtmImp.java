@@ -1,9 +1,9 @@
-package ru.otus.slisenko.atm.core.atm;
+package ru.otus.slisenko.atm_department.core.atm;
 
-import ru.otus.slisenko.atm.commands.Command;
-import ru.otus.slisenko.atm.commands.CommandResult;
-import ru.otus.slisenko.atm.core.AtmObserver;
-import ru.otus.slisenko.atm.exceptions.ATMException;
+import ru.otus.slisenko.atm_department.commands.Command;
+import ru.otus.slisenko.atm_department.commands.CommandResult;
+import ru.otus.slisenko.atm_department.core.AtmObserver;
+import ru.otus.slisenko.atm_department.exceptions.ATMException;
 
 import java.util.HashMap;
 import java.util.Map;

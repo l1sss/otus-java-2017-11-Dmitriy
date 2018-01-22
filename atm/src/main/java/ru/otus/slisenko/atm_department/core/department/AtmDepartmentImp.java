@@ -1,8 +1,8 @@
-package ru.otus.slisenko.atm.core.department;
+package ru.otus.slisenko.atm_department.core.department;
 
-import ru.otus.slisenko.atm.commands.GetBalanceCommand;
-import ru.otus.slisenko.atm.commands.RestoreDefaultCommand;
-import ru.otus.slisenko.atm.core.AtmObserver;
+import ru.otus.slisenko.atm_department.commands.GetBalanceCommand;
+import ru.otus.slisenko.atm_department.commands.RestoreDefaultCommand;
+import ru.otus.slisenko.atm_department.core.AtmObserver;
 
 import java.util.HashSet;
 import java.util.Set;

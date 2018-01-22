@@ -1,6 +1,6 @@
-package ru.otus.slisenko.atm.commands;
+package ru.otus.slisenko.atm_department.commands;
 
-import ru.otus.slisenko.atm.core.atm.Atm;
+import ru.otus.slisenko.atm_department.core.atm.Atm;
 
 public class RestoreDefaultCommand implements Command {
 

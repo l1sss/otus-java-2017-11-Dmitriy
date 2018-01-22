@@ -1,4 +1,4 @@
-package ru.otus.slisenko.atm.exceptions;
+package ru.otus.slisenko.atm_department.exceptions;
 
 public class ATMException extends RuntimeException {
 
