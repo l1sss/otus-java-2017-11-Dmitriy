@@ -2,8 +2,8 @@ package ru.otus.slisenko.atm;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.otus.slisenko.atm.core.AtmImp;
-import ru.otus.slisenko.atm.core.Denomination;
+import ru.otus.slisenko.atm.core.atm.AtmImp;
+import ru.otus.slisenko.atm.core.atm.Denomination;
 import ru.otus.slisenko.atm.exceptions.ATMException;
 
 import java.util.HashMap;

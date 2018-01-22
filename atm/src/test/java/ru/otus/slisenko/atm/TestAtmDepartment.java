@@ -2,10 +2,10 @@ package ru.otus.slisenko.atm;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.otus.slisenko.atm.core.AtmDepartment;
-import ru.otus.slisenko.atm.core.AtmDepartmentImp;
-import ru.otus.slisenko.atm.core.AtmImp;
-import ru.otus.slisenko.atm.core.Denomination;
+import ru.otus.slisenko.atm.core.department.AtmDepartment;
+import ru.otus.slisenko.atm.core.department.AtmDepartmentImp;
+import ru.otus.slisenko.atm.core.atm.AtmImp;
+import ru.otus.slisenko.atm.core.atm.Denomination;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package ru.otus.slisenko.atm.core;
+package ru.otus.slisenko.atm.core.atm;
 
 import java.util.HashMap;
 import java.util.Map;
