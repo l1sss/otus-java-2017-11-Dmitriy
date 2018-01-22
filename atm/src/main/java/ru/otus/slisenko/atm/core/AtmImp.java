@@ -1,20 +1,20 @@
 package ru.otus.slisenko.atm.core;
 
+import ru.otus.slisenko.atm.commands.Command;
+import ru.otus.slisenko.atm.commands.CommandResult;
 import ru.otus.slisenko.atm.exceptions.ATMException;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ATMImp implements ATM {
-    private final String id;
-    private static long ATMId;
-    private Map<Denomination, Integer> dispensers = new HashMap<>();
-    private DefaultState defaultState;
+public class AtmImp implements Atm, AtmObserver {
+    private Map<Denomination, Integer> dispensers;
+    private StateHolder defaultState;
 
-    public ATMImp() {
-        id = Long.toString(++ATMId);
-        defaultState = new DefaultState(new HashMap<>());
+    public AtmImp() {
+        dispensers = new HashMap<>();
+        defaultState = new StateHolder(new HashMap<>());
     }
 
     @Override
@@ -48,13 +48,12 @@ public class ATMImp implements ATM {
     }
 
     @Override
-    public void restoreToDefaultState() {
+    public void restoreDefaultState() {
         dispensers = new HashMap<>(defaultState.getState());
     }
 
-    @Override
     public void setNewDefaultState(Map<Denomination, Integer> newDefaultState) {
-        defaultState = new DefaultState(newDefaultState);
+        defaultState = new StateHolder(newDefaultState);
     }
 
     @Override
@@ -66,23 +65,22 @@ public class ATMImp implements ATM {
     }
 
     @Override
-    public String getId() {
-        return id;
+    public CommandResult notify(Command command) {
+        return command.execute(this);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ATMImp atmImp = (ATMImp) o;
-        return Objects.equals(id, atmImp.id) &&
-                Objects.equals(dispensers, atmImp.dispensers) &&
+        AtmImp atmImp = (AtmImp) o;
+        return Objects.equals(dispensers, atmImp.dispensers) &&
                 Objects.equals(defaultState, atmImp.defaultState);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, dispensers, defaultState);
+        return Objects.hash(dispensers, defaultState);
     }
 }

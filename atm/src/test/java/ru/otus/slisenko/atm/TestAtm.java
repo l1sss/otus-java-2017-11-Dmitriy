@@ -2,33 +2,26 @@ package ru.otus.slisenko.atm;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.otus.slisenko.atm.core.ATM;
+import ru.otus.slisenko.atm.core.AtmImp;
 import ru.otus.slisenko.atm.core.Denomination;
-import ru.otus.slisenko.atm.core.ATMImp;
 import ru.otus.slisenko.atm.exceptions.ATMException;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
-public class TestATM {
-    private ATM atm;
+public class TestAtm {
+    private AtmImp atm;
 
     @Before
     public void init() {
-        atm = new ATMImp();
+        atm = new AtmImp();
     }
 
     @Test
     public void getBalanceOfEmptyATM() {
         assertEquals(0, atm.getBalance());
-    }
-
-    @Test
-    public void getId() {
-        assertNotNull(atm.getId());
     }
 
     @Test
@@ -78,11 +71,11 @@ public class TestATM {
     @Test
     public void restoreToDefaultState() {
         atm.deposit(Denomination.FIVE_HUNDRED, 1);
-        atm.restoreToDefaultState();
+        atm.restoreDefaultState();
         assertEquals(0, atm.getBalance());
 
         atm.deposit(Denomination.FIVE_THOUSAND, 1);
-        atm.restoreToDefaultState();
+        atm.restoreDefaultState();
         assertEquals(0, atm.getBalance());
     }
 
@@ -92,11 +85,11 @@ public class TestATM {
         Map<Denomination, Integer> newDefaultState = new HashMap<>();
         newDefaultState.put(Denomination.ONE_HUNDRED, 1);
         atm.setNewDefaultState(newDefaultState);
-        atm.restoreToDefaultState();
+        atm.restoreDefaultState();
         assertEquals(100, atm.getBalance());
 
         newDefaultState.put(Denomination.ONE_THOUSAND, 1);
-        atm.restoreToDefaultState();
+        atm.restoreDefaultState();
         assertEquals(100, atm.getBalance());
     }
 }

@@ -3,10 +3,10 @@ package ru.otus.slisenko.atm.core;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultState {
+public class StateHolder {
     private Map<Denomination, Integer> state;
 
-    public DefaultState(Map<Denomination, Integer> state) {
+    public StateHolder(Map<Denomination, Integer> state) {
         this.state = new HashMap<>(state);
     }
 
