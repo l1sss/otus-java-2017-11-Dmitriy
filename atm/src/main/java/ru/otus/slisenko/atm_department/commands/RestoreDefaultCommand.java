@@ -8,6 +8,6 @@ public class RestoreDefaultCommand implements Command {
     public CommandResult execute(Atm atm) {
         atm.restoreDefaultState();
 
-        return new CommandResult(1);
+        return new CommandResult<>(true);
     }
 }

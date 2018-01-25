@@ -1,13 +1,13 @@
 package ru.otus.slisenko.atm_department.commands;
 
-public class CommandResult {
-    private int result;
+public class CommandResult<T> {
+    private T result;
 
-    public CommandResult(int result) {
+    public CommandResult(T result) {
         this.result = result;
     }
 
-    public int getResult() {
+    public T getResult() {
         return result;
     }
 }

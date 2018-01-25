@@ -22,7 +22,7 @@ public class AtmDepartmentImp implements AtmDepartment {
     @Override
     public int getTotalBalance() {
         return atmSet.stream()
-                .mapToInt((atm) -> atm.notify(new GetBalanceCommand()).getResult())
+                .mapToInt((atm) -> (int) atm.notify(new GetBalanceCommand()).getResult())
                 .sum();
     }
 

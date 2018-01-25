@@ -6,6 +6,6 @@ public class GetBalanceCommand implements Command {
 
     @Override
     public CommandResult execute(Atm atm) {
-        return new CommandResult(atm.getBalance());
+        return new CommandResult<>(atm.getBalance());
     }
 }
