@@ -6,7 +6,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonStructure;
 
-public class CollectionAdapter extends TypeAdapter {
+public class IterableAdapter extends TypeAdapter {
     @Override
     public JsonStructure addToJsonTree(JsonWriter writer, Object collection) {
         JsonArrayBuilder builder = Json.createArrayBuilder();

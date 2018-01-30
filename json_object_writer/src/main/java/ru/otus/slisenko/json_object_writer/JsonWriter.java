@@ -1,7 +1,7 @@
 package ru.otus.slisenko.json_object_writer;
 
 import ru.otus.slisenko.json_object_writer.adapter.ArrayAdapter;
-import ru.otus.slisenko.json_object_writer.adapter.CollectionAdapter;
+import ru.otus.slisenko.json_object_writer.adapter.IterableAdapter;
 import ru.otus.slisenko.json_object_writer.adapter.ObjectAdapter;
 import ru.otus.slisenko.json_object_writer.adapter.TypeAdapter;
 
@@ -32,7 +32,7 @@ public class JsonWriter {
         if (type.isArray())
             return new ArrayAdapter();
         else if (Collection.class.isAssignableFrom(type))
-            return new CollectionAdapter();
+            return new IterableAdapter();
         else
             return new ObjectAdapter();
     }
