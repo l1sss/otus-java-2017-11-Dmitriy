@@ -8,6 +8,7 @@ import javax.json.JsonStructure;
 import java.lang.reflect.Field;
 
 public class ObjectAdapter extends TypeAdapter {
+
     @Override
     public JsonStructure addToJsonTree(JsonWriter writer, Object source) {
         JsonObjectBuilder builder = Json.createObjectBuilder();

@@ -9,18 +9,18 @@ class ReflectionHelper {
 
     static Object getFieldValue(Object source, String name) {
         Field field = null;
-        boolean isAccessable = true;
+        boolean isAccessible = true;
         try {
             field = source.getClass().getDeclaredField(name);
             if (!Modifier.isTransient(field.getModifiers())) {
-                isAccessable = field.canAccess(source);
+                isAccessible = field.canAccess(source);
                 field.setAccessible(true);
                 return field.get(source);
             }
         } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         } finally {
-            if (field != null && !isAccessable)
+            if (field != null && !isAccessible)
                 field.setAccessible(false);
         }
         return null;

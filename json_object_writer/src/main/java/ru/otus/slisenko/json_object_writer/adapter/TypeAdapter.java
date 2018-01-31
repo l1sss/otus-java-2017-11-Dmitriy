@@ -5,6 +5,7 @@ import ru.otus.slisenko.json_object_writer.JsonWriter;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonStructure;
+import java.util.Arrays;
 
 public abstract class TypeAdapter {
     private static Class<?>[] SIMPLE_TYPES = {
@@ -14,12 +15,9 @@ public abstract class TypeAdapter {
 
     public abstract JsonStructure addToJsonTree(JsonWriter writer, Object source);
 
-    boolean isSimpleTypeValue(Class<?> type) {
-        for (Class<?> simpleType : SIMPLE_TYPES) {
-            if (simpleType.isAssignableFrom(type))
-                return true;
-        }
-        return false;
+    boolean isSimpleType(Class<?> type) {
+        return Arrays.stream(SIMPLE_TYPES)
+                .anyMatch((simpleType) -> simpleType.isAssignableFrom(type));
     }
 
     void addSimpleValueToJsonArray(Object arrayValue, JsonArrayBuilder builder) {

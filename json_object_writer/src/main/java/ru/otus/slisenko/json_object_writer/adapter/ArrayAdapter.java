@@ -8,6 +8,7 @@ import javax.json.JsonStructure;
 import java.lang.reflect.Array;
 
 public class ArrayAdapter extends TypeAdapter {
+
     @Override
     public JsonStructure addToJsonTree(JsonWriter writer, Object array) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
@@ -15,7 +16,7 @@ public class ArrayAdapter extends TypeAdapter {
             Object value = Array.get(array, i);
             if (value == null)
                 builder.addNull();
-            else if (isSimpleTypeValue(value.getClass()))
+            else if (isSimpleType(value.getClass()))
                 addSimpleValueToJsonArray(value, builder);
             else
                 builder.add(writer.toJsonTree(value));
