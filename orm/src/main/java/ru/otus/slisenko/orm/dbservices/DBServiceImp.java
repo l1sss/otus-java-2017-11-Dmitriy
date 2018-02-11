@@ -1,10 +1,9 @@
 package ru.otus.slisenko.orm.dbservices;
 
-import ru.otus.slisenko.orm.datasets.DataSet;
-import ru.otus.slisenko.orm.executor.Executor;
+import ru.otus.slisenko.orm.datasets.UserDataSet;
+import ru.otus.slisenko.orm.dbservices.dao.UserDataSetDAO;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 public class DBServiceImp implements DBService {
     private final Connection connection;
@@ -14,19 +13,19 @@ public class DBServiceImp implements DBService {
     }
 
     @Override
-    public void addDataSet(DataSet dataSet) throws SQLException {
-        Executor executor = new Executor(connection);
-        executor.save(dataSet);
-        System.out.println("Data set's been added: " + dataSet.toString());
+    public void save(UserDataSet dataSet) {
+        UserDataSetDAO dao = new UserDataSetDAO(connection);
+        dao.save(dataSet);
+        System.out.println("ADDED: " + dataSet.toString());
     }
 
     @Override
-    public void getDataSet(long id, Class<? extends DataSet> dataSetClass) throws SQLException {
-        Executor executor = new Executor(connection);
-        DataSet dataSet = executor.load(id, dataSetClass);
-        System.out.println(dataSet != null
-                ? "Data set's been loaded: " + dataSet.toString()
-                : "Loaded data set is empty");
+    public UserDataSet read(long id) {
+        UserDataSetDAO dao = new UserDataSetDAO(connection);
+        UserDataSet dataSet = dao.read(id);
+        System.out.println(
+                dataSet != null ? "LOADED: " + dataSet.toString() : "IS EMPTY");
+        return dataSet;
     }
 
     @Override

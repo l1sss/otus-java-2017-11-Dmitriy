@@ -1,12 +1,10 @@
 package ru.otus.slisenko.orm.dbservices;
 
-import ru.otus.slisenko.orm.datasets.DataSet;
-
-import java.sql.SQLException;
+import ru.otus.slisenko.orm.datasets.UserDataSet;
 
 public interface DBService extends AutoCloseable {
 
-    void addDataSet(DataSet dataSet) throws SQLException;
+    void save(UserDataSet dataSet);
 
-    void getDataSet(long id, Class<? extends DataSet> dataSetClass) throws SQLException;
+    UserDataSet read(long id);
 }

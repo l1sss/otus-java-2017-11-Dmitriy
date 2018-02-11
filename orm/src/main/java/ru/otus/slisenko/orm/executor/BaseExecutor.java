@@ -14,18 +14,22 @@ class BaseExecutor {
         this.connection = connection;
     }
 
-    int execUpdate(String update) throws SQLException {
+    int execUpdate(String update) {
         try (Statement statement = connection.createStatement()) {
             statement.execute(update);
             return statement.getUpdateCount();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    <T extends DataSet> T execQuery(String query, ResultHandler<T> handler) throws SQLException {
+    <T extends DataSet> T execQuery(String query, ResultHandler<T> handler) {
         try (Statement statement = connection.createStatement()) {
             statement.execute(query);
             ResultSet resultSet = statement.getResultSet();
             return handler.handle(resultSet);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

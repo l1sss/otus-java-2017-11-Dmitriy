@@ -12,8 +12,8 @@ public class Main {
 
     private void run() throws Exception {
         try (DBService dbService = new DBServiceImp()) {
-            dbService.addDataSet(new UserDataSet("Kazama", 28));
-            dbService.getDataSet(1, UserDataSet.class);
+            dbService.save(new UserDataSet("Kazama", 28));
+            dbService.read(1);
         }
     }
 }
