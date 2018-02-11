@@ -1,4 +1,4 @@
-package ru.otus.slisenko.orm.DBService;
+package ru.otus.slisenko.orm.dbservices;
 
 import org.postgresql.Driver;
 
@@ -18,7 +18,8 @@ class ConnectionHelper {
                     "otus_database?" +
                     "user=l1s&" +
                     "password=qwerty&" +
-                    "useSSL=false";
+                    "useSSL=false" +
+                    "serverTimezone=UTC";
 
             return DriverManager.getConnection(url);
         } catch (SQLException e) {

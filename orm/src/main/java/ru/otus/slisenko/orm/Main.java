@@ -1,8 +1,8 @@
 package ru.otus.slisenko.orm;
 
-import ru.otus.slisenko.orm.DBService.DBService;
-import ru.otus.slisenko.orm.DBService.DBServiceImp;
-import ru.otus.slisenko.orm.dataset.UserDataSet;
+import ru.otus.slisenko.orm.dbservices.DBService;
+import ru.otus.slisenko.orm.dbservices.DBServiceImp;
+import ru.otus.slisenko.orm.datasets.UserDataSet;
 
 public class Main {
 
@@ -12,14 +12,8 @@ public class Main {
 
     private void run() throws Exception {
         try (DBService dbService = new DBServiceImp()) {
-            System.out.println(dbService.getMetaData());
-            dbService.prepareTable();
-            dbService.addUser(new UserDataSet("Leonardo", 34));
-            dbService.addUser(new UserDataSet("Michelangelo", 34));
-            dbService.addUser(new UserDataSet("Donatello", 34));
-            dbService.addUser(new UserDataSet("Raphael", 34));
-            System.out.println(dbService.getUser(3, UserDataSet.class));
-            dbService.deleteTable();
+            dbService.addDataSet(new UserDataSet("Kazama", 28));
+            dbService.getDataSet(1, UserDataSet.class);
         }
     }
 }

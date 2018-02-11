@@ -2,29 +2,37 @@ package ru.otus.slisenko.orm.executor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
+@SuppressWarnings("SameParameterValue")
 class ReflectionHelper {
-
     private ReflectionHelper() {
     }
 
-    static <T> T instantiate(Class<T> type) {
+    static <T> T instantiate(Class<T> type, Object... args) {
         try {
-            return type.getDeclaredConstructor().newInstance();
+            if (args.length == 0) {
+                return type.getDeclaredConstructor().newInstance();
+            } else {
+                Class<?>[] classes = toClasses(args);
+                return type.getDeclaredConstructor(classes).newInstance(args);
+            }
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    static Object getFieldValue(Object source, String name) {
+    static Object getFieldValue(Object object, String name) {
         Field field = null;
         boolean isAccessible = true;
         try {
-            field = source.getClass().getDeclaredField(name);
-            isAccessible = field.canAccess(source);
+            field = object.getClass().getDeclaredField(name);
+            isAccessible = field.canAccess(object);
             field.setAccessible(true);
-            return field.get(source);
+            return field.get(object);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         } finally {
@@ -35,14 +43,14 @@ class ReflectionHelper {
         return null;
     }
 
-    static void setFieldValue(Object source, String name, Object value) {
+    static void setFieldValue(Object object, String name, Object value) {
         Field field = null;
         boolean isAccessible = true;
         try {
-            field = source.getClass().getDeclaredField(name);
-            isAccessible = field.canAccess(source);
+            field = object.getClass().getDeclaredField(name); //getField() for public fields
+            isAccessible = field.canAccess(object);
             field.setAccessible(true);
-            field.set(source, value);
+            field.set(object, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         } finally {
@@ -50,5 +58,10 @@ class ReflectionHelper {
                 field.setAccessible(false);
             }
         }
+    }
+
+    static private Class<?>[] toClasses(Object[] args) {
+        return Arrays.stream(args)
+                .map(Object::getClass).toArray(Class<?>[]::new);
     }
 }
