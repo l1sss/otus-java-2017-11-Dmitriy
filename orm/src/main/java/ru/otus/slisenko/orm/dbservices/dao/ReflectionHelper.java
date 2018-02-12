@@ -1,4 +1,4 @@
-package ru.otus.slisenko.orm.executor;
+package ru.otus.slisenko.orm.dbservices.dao;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
