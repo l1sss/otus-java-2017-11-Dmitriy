@@ -1,21 +1,24 @@
-package ru.otus.slisenko.orm.executor;
+package ru.otus.slisenko.orm.dbservices.jdbc.dao;
 
-import ru.otus.slisenko.orm.datasets.DataSet;
 import ru.otus.slisenko.orm.datasets.DataSetAdapter;
+import ru.otus.slisenko.orm.datasets.UserDataSet;
+import ru.otus.slisenko.orm.dbservices.jdbc.executor.Executor;
+import ru.otus.slisenko.orm.dbservices.jdbc.executor.ExecutorImp;
+import ru.otus.slisenko.orm.dbservices.jdbc.executor.ResultHandler;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Map;
 
-public class Executor extends BaseExecutor {
+public class UsersDAO {
     private static final String INSERT_QUERY = "INSERT INTO %s (%s) values (%s);";
     private static final String SELECT_QUERY = "SELECT * FROM %s WHERE id=%s;";
+    private final Executor executor;
 
-    public Executor(Connection connection) {
-        super(connection);
+    public UsersDAO(Connection connection) {
+        executor = new ExecutorImp(connection);
     }
 
-    public <T extends DataSet> void save(T dataSet) {
+    public void save(UserDataSet dataSet) {
         StringBuilder fieldNamesBuilder = new StringBuilder();
         StringBuilder fieldValuesBuilder = new StringBuilder();
         DataSetAdapter dataSetAdapter = new DataSetAdapter(dataSet.getClass());
@@ -37,18 +40,18 @@ public class Executor extends BaseExecutor {
                 fieldValuesBuilder.append(',');
             }
         }
-        execUpdate(String.format(INSERT_QUERY,
+        executor.execUpdate(String.format(INSERT_QUERY,
                 dataSetAdapter.getTableName(),
                 fieldNamesBuilder.toString(),
                 fieldValuesBuilder.toString()));
     }
 
-    public <T extends DataSet> T load(long id, Class<T> type) {
-        DataSetAdapter dataSetAdapter = new DataSetAdapter(type);
+    public UserDataSet read(long id) {
+        DataSetAdapter dataSetAdapter = new DataSetAdapter(UserDataSet.class);
 
-        ResultHandler<T> handler = resultSet -> {
+        ResultHandler<UserDataSet> handler = resultSet -> {
             if (resultSet.next()) {
-                T instance = ReflectionHelper.instantiate(type);
+                UserDataSet instance = ReflectionHelper.instantiate(UserDataSet.class);
                 if (instance != null) {
                     instance.setId(resultSet.getLong("id"));
                     for (Map.Entry<String, Class<?>> field : dataSetAdapter.getFields().entrySet()) {
@@ -59,6 +62,6 @@ public class Executor extends BaseExecutor {
             }
             return null;
         };
-        return execQuery(String.format(SELECT_QUERY, dataSetAdapter.getTableName(), id), handler);
+        return executor.execQuery(String.format(SELECT_QUERY, dataSetAdapter.getTableName(), id), handler);
     }
 }

@@ -1,7 +1,8 @@
-package ru.otus.slisenko.orm.dbservices;
+package ru.otus.slisenko.orm.dbservices.jdbc;
 
 import ru.otus.slisenko.orm.datasets.UserDataSet;
-import ru.otus.slisenko.orm.dbservices.dao.UserDataSetDAO;
+import ru.otus.slisenko.orm.dbservices.DBService;
+import ru.otus.slisenko.orm.dbservices.jdbc.dao.UsersDAO;
 
 import java.sql.Connection;
 
@@ -14,14 +15,14 @@ public class DBServiceImp implements DBService {
 
     @Override
     public void save(UserDataSet dataSet) {
-        UserDataSetDAO dao = new UserDataSetDAO(connection);
+        UsersDAO dao = new UsersDAO(connection);
         dao.save(dataSet);
         System.out.println("ADDED: " + dataSet.toString());
     }
 
     @Override
     public UserDataSet read(long id) {
-        UserDataSetDAO dao = new UserDataSetDAO(connection);
+        UsersDAO dao = new UsersDAO(connection);
         UserDataSet dataSet = dao.read(id);
         System.out.println(
                 dataSet != null ? "LOADED: " + dataSet.toString() : "IS EMPTY");

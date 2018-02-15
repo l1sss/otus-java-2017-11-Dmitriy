@@ -1,12 +1,9 @@
-package ru.otus.slisenko.orm.executor;
+package ru.otus.slisenko.orm.dbservices.jdbc.dao;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
-@SuppressWarnings("SameParameterValue")
 class ReflectionHelper {
     private ReflectionHelper() {
     }
@@ -47,7 +44,7 @@ class ReflectionHelper {
         Field field = null;
         boolean isAccessible = true;
         try {
-            field = object.getClass().getDeclaredField(name); //getField() for public fields
+            field = object.getClass().getDeclaredField(name);
             isAccessible = field.canAccess(object);
             field.setAccessible(true);
             field.set(object, value);

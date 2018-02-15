@@ -1,4 +1,4 @@
-package ru.otus.slisenko.orm.executor;
+package ru.otus.slisenko.orm.dbservices.jdbc.executor;
 
 import ru.otus.slisenko.orm.datasets.DataSet;
 
@@ -7,14 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-class BaseExecutor {
+public class ExecutorImp implements Executor {
     final Connection connection;
 
-    BaseExecutor(Connection connection) {
+    public ExecutorImp(Connection connection) {
         this.connection = connection;
     }
 
-    int execUpdate(String update) {
+    @Override
+    public int execUpdate(String update) {
         try (Statement statement = connection.createStatement()) {
             statement.execute(update);
             return statement.getUpdateCount();
@@ -23,7 +24,8 @@ class BaseExecutor {
         }
     }
 
-    <T extends DataSet> T execQuery(String query, ResultHandler<T> handler) {
+    @Override
+    public <T extends DataSet> T execQuery(String query, ResultHandler<T> handler) {
         try (Statement statement = connection.createStatement()) {
             statement.execute(query);
             ResultSet resultSet = statement.getResultSet();

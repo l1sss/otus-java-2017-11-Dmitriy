@@ -1,4 +1,4 @@
-package ru.otus.slisenko.orm.executor;
+package ru.otus.slisenko.orm.dbservices.jdbc.executor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

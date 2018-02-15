@@ -1,4 +1,4 @@
-package ru.otus.slisenko.orm.dbservices;
+package ru.otus.slisenko.orm.dbservices.jdbc;
 
 import org.postgresql.Driver;
 
