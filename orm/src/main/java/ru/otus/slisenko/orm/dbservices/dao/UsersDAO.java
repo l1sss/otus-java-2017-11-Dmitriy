@@ -9,12 +9,12 @@ import ru.otus.slisenko.orm.executor.ResultHandler;
 import java.sql.Connection;
 import java.util.Map;
 
-public class UserDataSetDAO {
+public class UsersDAO {
     private static final String INSERT_QUERY = "INSERT INTO %s (%s) values (%s);";
     private static final String SELECT_QUERY = "SELECT * FROM %s WHERE id=%s;";
     private final Executor executor;
 
-    public UserDataSetDAO(Connection connection) {
+    public UsersDAO(Connection connection) {
         executor = new ExecutorImp(connection);
     }
 
@@ -25,7 +25,7 @@ public class UserDataSetDAO {
         Map<String, Class<?>> fields = dataSetAdapter.getFields();
 
         int fieldsCount = 0;
-        for(Map.Entry<String, Class<?>> entry : fields.entrySet()) {
+        for (Map.Entry<String, Class<?>> entry : fields.entrySet()) {
             fieldsCount++;
             fieldNamesBuilder.append(entry.getKey());
             Object fieldValue = ReflectionHelper.getFieldValue(dataSet, entry.getKey());

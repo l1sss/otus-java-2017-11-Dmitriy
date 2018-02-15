@@ -12,7 +12,7 @@ public class Main {
 
     private void run() throws Exception {
         try (DBService dbService = new DBServiceImp()) {
-            dbService.save(new UserDataSet("Willis", 62));
+            dbService.save(new UserDataSet("Jo", 28));
             dbService.read(3);
         }
     }
