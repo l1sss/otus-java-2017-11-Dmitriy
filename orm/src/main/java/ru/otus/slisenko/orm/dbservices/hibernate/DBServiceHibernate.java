@@ -8,19 +8,20 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import ru.otus.slisenko.orm.datasets.UserDataSet;
 import ru.otus.slisenko.orm.dbservices.DBService;
-import ru.otus.slisenko.orm.dbservices.hibernate.dao.UsersHbDAO;
+import ru.otus.slisenko.orm.dbservices.hibernate.dao.UsersHibernateDAO;
 
+import java.util.List;
 import java.util.function.Function;
 
-public class DBServiceHbImp implements DBService {
+public class DBServiceHibernate implements DBService {
     private final SessionFactory sessionFactory;
 
-    public DBServiceHbImp() {
+    public DBServiceHibernate() {
         Configuration configuration = ConfigurationHelper.getDefaultConfig();
         sessionFactory = createSessionFactory(configuration);
     }
 
-    public DBServiceHbImp(Configuration configuration) {
+    public DBServiceHibernate(Configuration configuration) {
         sessionFactory = createSessionFactory(configuration);
     }
 
@@ -33,16 +34,26 @@ public class DBServiceHbImp implements DBService {
 
     @Override
     public void save(UserDataSet dataSet) {
-        try (Session session = sessionFactory.openSession()) {
-            session.save(dataSet);
-        }
+        runInSession(session -> {
+            UsersHibernateDAO dao = new UsersHibernateDAO(session);
+            dao.save(dataSet);
+            return null;
+        });
     }
 
     @Override
-    public UserDataSet read(long id) {
+    public UserDataSet load(long id) {
         return runInSession(session -> {
-            UsersHbDAO dao = new UsersHbDAO(session);
-            return dao.read(id);
+            UsersHibernateDAO dao = new UsersHibernateDAO(session);
+            return dao.load(id);
+        });
+    }
+
+    @Override
+    public List<UserDataSet> loadAll() {
+        return runInSession(session -> {
+            UsersHibernateDAO dao = new UsersHibernateDAO(session);
+            return dao.loadAll();
         });
     }
 

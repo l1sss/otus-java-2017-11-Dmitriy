@@ -1,21 +1,26 @@
 package ru.otus.slisenko.orm.datasets;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-@TableName(name = "users")
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class UserDataSet extends DataSet {
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "age")
     private int age;
 
-    public UserDataSet() {
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    private AddressDataSet address;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PhoneDataSet> phones = new HashSet<>();
+
+    public UserDataSet() {}
 
     public UserDataSet(String name, int age) {
         this.name = name;
@@ -38,11 +43,34 @@ public class UserDataSet extends DataSet {
         this.age = age;
     }
 
+    public AddressDataSet getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressDataSet address) {
+        this.address = address;
+    }
+
+    public Set<PhoneDataSet> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(Set<PhoneDataSet> phones) {
+        this.phones = phones;
+    }
+
+    public void addPhone(PhoneDataSet phone) {
+        phones.add(phone);
+        phone.setUser(this);
+    }
+
     @Override
     public String toString() {
         return "UserDataSet{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
+                ", address=" + address +
+                ", phones=" + phones +
                 '}';
     }
 }
