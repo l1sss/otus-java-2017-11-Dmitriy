@@ -1,11 +1,16 @@
 package ru.otus.slisenko.orm.datasets;
 
-@TableName(name = "users")
 public class UserDataSet extends DataSet {
     private String name;
     private int age;
 
     public UserDataSet() {
+    }
+
+    public UserDataSet (long id, String name, int age) {
+        super(id);
+        this.name = name;
+        this.age = age;
     }
 
     public UserDataSet(String name, int age) {

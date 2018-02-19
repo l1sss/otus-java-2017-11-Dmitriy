@@ -1,7 +1,5 @@
 package ru.otus.slisenko.orm.executor;
 
-import ru.otus.slisenko.orm.datasets.DataSet;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +22,7 @@ public class ExecutorImp implements Executor {
         }
     }
 
-    public <T extends DataSet> T execQuery(String query, ResultHandler<T> handler) {
+    public <T> T execQuery(String query, ResultHandler<T> handler) {
         try (Statement statement = connection.createStatement()) {
             statement.execute(query);
             ResultSet resultSet = statement.getResultSet();
