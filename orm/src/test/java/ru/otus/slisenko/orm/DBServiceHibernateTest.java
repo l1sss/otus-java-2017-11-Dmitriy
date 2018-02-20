@@ -87,6 +87,20 @@ public class DBServiceHibernateTest {
     }
 
     @Test
+    public void loadUserByName() {
+        UserDataSet user = new UserDataSet("name", 10);
+        UserDataSet user2 = new UserDataSet("name2", 20);
+        UserDataSet user3 = new UserDataSet("name3", 30);
+
+        dbService.save(user);
+        dbService.save(user2);
+        dbService.save(user3);
+
+
+        assertThat(dbService.loadByName("name2").getName(), is(user2.getName()));
+    }
+
+    @Test
     public void loadAllUsers() {
         UserDataSet user = new UserDataSet("name", 10);
         UserDataSet user2 = new UserDataSet("name2", 20);

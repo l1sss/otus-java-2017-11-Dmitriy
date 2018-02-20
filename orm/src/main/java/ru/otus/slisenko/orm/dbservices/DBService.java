@@ -10,5 +10,7 @@ public interface DBService extends AutoCloseable {
 
     UserDataSet load(long id);
 
+    UserDataSet loadByName(String name);
+
     List<UserDataSet> loadAll();
 }

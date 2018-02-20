@@ -1,5 +1,6 @@
 package ru.otus.slisenko.orm.dbservices.hibernate;
 
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -46,6 +47,14 @@ public class DBServiceHibernate implements DBService {
         return runInSession(session -> {
             UsersHibernateDAO dao = new UsersHibernateDAO(session);
             return dao.load(id);
+        });
+    }
+
+    @Override
+    public UserDataSet loadByName(String name) {
+        return runInSession(session -> {
+            UsersHibernateDAO dao = new UsersHibernateDAO(session);
+            return dao.loadByName(name);
         });
     }
 
