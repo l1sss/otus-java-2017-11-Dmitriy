@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface DBService extends AutoCloseable {
 
+    String getLocalStatus();
+
     void save(UserDataSet dataSet);
 
     UserDataSet load(long id);

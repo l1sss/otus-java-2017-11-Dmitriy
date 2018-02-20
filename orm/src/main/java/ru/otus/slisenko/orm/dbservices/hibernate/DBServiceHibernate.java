@@ -34,6 +34,11 @@ public class DBServiceHibernate implements DBService {
     }
 
     @Override
+    public String getLocalStatus() {
+        return runInSession(session -> session.getTransaction().getStatus().name());
+    }
+
+    @Override
     public void save(UserDataSet dataSet) {
         runInSession(session -> {
             UsersHibernateDAO dao = new UsersHibernateDAO(session);
