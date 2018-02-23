@@ -41,9 +41,8 @@ public class DBServiceHibernate implements DBService {
     @Override
     public void save(UserDataSet dataSet) {
         runInSession(session -> {
-            UsersHibernateDAO dao = new UsersHibernateDAO(session);
-            dao.save(dataSet);
-            return null;
+            session.saveOrUpdate(dataSet);
+            return dataSet;
         });
     }
 
