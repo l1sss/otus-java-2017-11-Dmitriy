@@ -1,5 +1,8 @@
 package ru.otus.slisenko.orm.dbservices;
 
+import ru.otus.slisenko.orm.cache.CacheEngine;
+import ru.otus.slisenko.orm.cache.CacheEngineImp;
+import ru.otus.slisenko.orm.cache.CacheElement;
 import ru.otus.slisenko.orm.datasets.UserDataSet;
 import ru.otus.slisenko.orm.dbservices.dao.UsersDAO;
 
@@ -12,10 +15,23 @@ import java.util.List;
 public class DBServiceImp implements DBService {
     private final Connection connection;
     private UsersDAO dao;
+    private CacheEngine<Long, UserDataSet> cacheEngine;
 
     public DBServiceImp() {
         connection = ConnectionHelper.getConnection();
         dao = new UsersDAO(connection);
+        cacheEngine = new CacheEngineImp.Builder<Long, UserDataSet>()
+                .maxElements(5)
+                .lifeTimeMS(1000)
+                .idleTimeMS(0)
+                .isEternal(false)
+                .build();
+    }
+
+    public DBServiceImp(CacheEngine<Long, UserDataSet> cacheEngine) {
+        connection = ConnectionHelper.getConnection();
+        dao = new UsersDAO(connection);
+        this.cacheEngine = cacheEngine;
     }
 
     @Override
@@ -49,17 +65,27 @@ public class DBServiceImp implements DBService {
 
     @Override
     public UserDataSet load(long id) {
+        CacheElement<Long, UserDataSet> element = cacheEngine.get(id);
+        UserDataSet dataSet = element != null ? element.getValue() : null;
+        if (dataSet == null) {
+            dataSet = dao.load(id);
+            if (dataSet != null)
+                cacheEngine.put(new CacheElement<>(dataSet.getId(), dataSet));
+        }
         return dao.load(id);
     }
 
     @Override
     public List<UserDataSet> loadAll() {
-        return dao.loadAll();
+        List<UserDataSet> result = dao.loadAll();
+        for (UserDataSet user : result)
+            cacheEngine.put(new CacheElement<>(user.getId(), user));
+        return result;
     }
 
     @Override
     public void close() throws Exception {
         connection.close();
-        System.out.println("Connection closed. Bye!");
+        cacheEngine.dispose();
     }
 }

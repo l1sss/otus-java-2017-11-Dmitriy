@@ -23,8 +23,9 @@ public class DBServiceTest {
     }
 
     @After
-    public void shutDown() {
+    public void shutDown() throws Exception {
         dbService.deleteTable();
+        dbService.close();
     }
 
     @Test
