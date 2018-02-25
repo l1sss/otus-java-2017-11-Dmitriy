@@ -1,10 +1,7 @@
 package ru.otus.slisenko.orm.cache;
 
 import java.lang.ref.SoftReference;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.function.Function;
 
 public class CacheEngineImp<K, V> implements CacheEngine<K, V> {
@@ -57,13 +54,12 @@ public class CacheEngineImp<K, V> implements CacheEngine<K, V> {
     }
 
     @Override
-    public void put(CacheElement<K, V> element) {
+    public void put(K key, V value) {
         if (elements.size() == maxElements) {
             K firstKey = elements.keySet().iterator().next();
             elements.remove(firstKey);
         }
-        K key = element.getKey();
-        elements.put(key, new SoftReference<>(element));
+        elements.put(key, new SoftReference<>(new CacheElement<>(key, value)));
         setTimerTask(key);
     }
 
@@ -97,15 +93,16 @@ public class CacheEngineImp<K, V> implements CacheEngine<K, V> {
     }
 
     @Override
-    public CacheElement<K, V> get(K key) {
+    public V get(K key) {
         CacheElement<K, V> element = getElement(key);
         if (element != null) {
             hit++;
             element.setAccessed();
+            return element.getValue();
         } else {
             miss++;
+            return null;
         }
-        return element;
     }
 
     private CacheElement<K, V> getElement(K key) {

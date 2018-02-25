@@ -14,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CacheEngineTest {
     private DBService dbService;
-    CacheEngine<Long, UserDataSet> cacheEngine;
+    private CacheEngine<Long, UserDataSet> cacheEngine;
 
     @Before
     public void init() {

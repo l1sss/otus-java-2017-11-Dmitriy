@@ -2,9 +2,9 @@ package ru.otus.slisenko.orm.cache;
 
 public interface CacheEngine<K, V> {
 
-    void put(CacheElement<K, V> element);
+    void put(K key, V value);
 
-    CacheElement<K, V> get(K key);
+    V get(K key);
 
     int getHitCount();
 

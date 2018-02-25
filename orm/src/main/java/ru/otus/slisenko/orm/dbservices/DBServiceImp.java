@@ -2,7 +2,6 @@ package ru.otus.slisenko.orm.dbservices;
 
 import ru.otus.slisenko.orm.cache.CacheEngine;
 import ru.otus.slisenko.orm.cache.CacheEngineImp;
-import ru.otus.slisenko.orm.cache.CacheElement;
 import ru.otus.slisenko.orm.datasets.UserDataSet;
 import ru.otus.slisenko.orm.dbservices.dao.UsersDAO;
 
@@ -65,12 +64,11 @@ public class DBServiceImp implements DBService {
 
     @Override
     public UserDataSet load(long id) {
-        CacheElement<Long, UserDataSet> element = cacheEngine.get(id);
-        UserDataSet dataSet = element != null ? element.getValue() : null;
+        UserDataSet dataSet = cacheEngine.get(id);
         if (dataSet == null) {
             dataSet = dao.load(id);
             if (dataSet != null)
-                cacheEngine.put(new CacheElement<>(dataSet.getId(), dataSet));
+                cacheEngine.put(dataSet.getId(), dataSet);
         }
         return dao.load(id);
     }
@@ -79,7 +77,7 @@ public class DBServiceImp implements DBService {
     public List<UserDataSet> loadAll() {
         List<UserDataSet> result = dao.loadAll();
         for (UserDataSet user : result)
-            cacheEngine.put(new CacheElement<>(user.getId(), user));
+            cacheEngine.put(user.getId(), user);
         return result;
     }
 
