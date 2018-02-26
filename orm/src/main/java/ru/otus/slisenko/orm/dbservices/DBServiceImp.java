@@ -60,6 +60,7 @@ public class DBServiceImp implements DBService {
     @Override
     public void save(UserDataSet dataSet) {
         dao.save(dataSet);
+        cacheEngine.put(dataSet.getId(), dataSet);
     }
 
     @Override

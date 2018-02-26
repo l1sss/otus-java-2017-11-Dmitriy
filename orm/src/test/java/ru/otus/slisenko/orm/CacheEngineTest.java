@@ -35,35 +35,25 @@ public class CacheEngineTest {
     }
 
     @Test
-    public void shouldIncrementMiss() {
-        UserDataSet user = new UserDataSet("name", 31);
-        dbService.save(user);
-
-        dbService.load(1);
-
-        assertThat(cacheEngine.getMissCount(), is(1));
-    }
-
-    @Test
-    public void shouldSecondIncrementMissAfterLifeTime() throws Exception {
-        UserDataSet user = new UserDataSet("name", 28);
-        dbService.save(user);
-
-        dbService.load(1);
-        Thread.sleep(500);
-        dbService.load(1);
-
-        assertThat(cacheEngine.getMissCount(), is(2));
-    }
-
-    @Test
     public void shouldIncrementHit() {
         UserDataSet user = new UserDataSet("name", 28);
         dbService.save(user);
 
         dbService.load(1);
+
+        assertThat(cacheEngine.getMissCount(), is(0));
+        assertThat(cacheEngine.getHitCount(), is(1));
+    }
+
+    @Test
+    public void shouldIncrementMissAfterLifeTime() throws Exception {
+        UserDataSet user = new UserDataSet("name", 28);
+        dbService.save(user);
+
+        Thread.sleep(600);
         dbService.load(1);
 
-        assertThat(cacheEngine.getHitCount(), is(1));
+        assertThat(cacheEngine.getMissCount(), is(1));
+        assertThat(cacheEngine.getHitCount(), is(0));
     }
 }

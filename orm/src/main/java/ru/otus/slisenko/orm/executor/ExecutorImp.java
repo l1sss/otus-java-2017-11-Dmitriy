@@ -1,9 +1,6 @@
 package ru.otus.slisenko.orm.executor;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ExecutorImp implements Executor {
     final Connection connection;
@@ -17,6 +14,18 @@ public class ExecutorImp implements Executor {
         try (Statement statement = connection.createStatement()) {
             statement.execute(update);
             return statement.getUpdateCount();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public long execInsert(String update) {
+        try (PreparedStatement statement = connection.prepareStatement(update, Statement.RETURN_GENERATED_KEYS)) {
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet.next();
+            return resultSet.getLong(1);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

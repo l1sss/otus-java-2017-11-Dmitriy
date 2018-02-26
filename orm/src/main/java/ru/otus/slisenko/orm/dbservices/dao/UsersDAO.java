@@ -32,8 +32,8 @@ public class UsersDAO {
     }
 
     public void save(UserDataSet dataSet) {
-        String query = String.format(INSERT_USER, dataSet.getName(), dataSet.getAge());
-        executor.execUpdate(query);
+        String insert = String.format(INSERT_USER, dataSet.getName(), dataSet.getAge());
+        dataSet.setId(executor.execInsert(insert));
     }
 
     public UserDataSet load(long id) {
