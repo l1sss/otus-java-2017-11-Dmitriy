@@ -33,7 +33,8 @@ public class UsersDAO {
 
     public void save(UserDataSet dataSet) {
         String insert = String.format(INSERT_USER, dataSet.getName(), dataSet.getAge());
-        dataSet.setId(executor.execInsert(insert));
+        long id = executor.execInsert(insert);
+        dataSet.setId(id);
     }
 
     public UserDataSet load(long id) {

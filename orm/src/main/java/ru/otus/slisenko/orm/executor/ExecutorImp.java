@@ -3,7 +3,7 @@ package ru.otus.slisenko.orm.executor;
 import java.sql.*;
 
 public class ExecutorImp implements Executor {
-    final Connection connection;
+    private final Connection connection;
 
     public ExecutorImp(Connection connection) {
         this.connection = connection;
@@ -20,8 +20,8 @@ public class ExecutorImp implements Executor {
     }
 
     @Override
-    public long execInsert(String update) {
-        try (PreparedStatement statement = connection.prepareStatement(update, Statement.RETURN_GENERATED_KEYS)) {
+    public long execInsert(String insert) {
+        try (PreparedStatement statement = connection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next();
