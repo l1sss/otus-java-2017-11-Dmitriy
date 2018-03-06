@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Webserver</title>
+    <script>
+        function refresh() {
+            location.reload(true);
+        }
+    </script>
+</head>
+
+<body onload='setInterval(function(){refresh()}, ${refreshPeriod});'>
+<p>CACHE PARAMETERS:</p>
+<p>Max elements: ${maxElements}</p>
+<p>Life time in millis: ${lifeTimeMS}</p>
+<p>Idle time in millis: ${idleTimeMS}</p>
+<p>Is eternal: ${isEternal}</p>
+<p>Hit count: ${hitCount}</p>
+<p>Miss count: ${missCount}</p>
+</body>
+</html>

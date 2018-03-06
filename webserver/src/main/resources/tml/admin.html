@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Webserver</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function checkUser() {
+            var userObj = {
+                "user": $('input[name=user]').val(),
+                "password": $('input[name=password]').val()
+            }
+            $.ajax({
+                url: "/admin",
+                method: "post",
+                data: userObj,
+                error: function() {
+                    alert('Wrong login or password!');
+                },
+                success: function() {
+                    location.href="/cache";
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+<form id="loginForm">
+    Login: <input type="text" name="user"/>
+    Password: <input type="password" name="password"/>
+    <input type="button" value="Sign in" onClick='checkUser();'>
+</form>
+</body>
+</html>
