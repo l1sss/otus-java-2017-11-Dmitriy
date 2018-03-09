@@ -106,8 +106,9 @@ public class CacheEngineImp<K, V> implements CacheEngine<K, V> {
     }
 
     private CacheElement<K, V> getElement(K key) {
-        if (elements.get(key) != null)
-            return elements.get(key).get();
+        SoftReference<CacheElement<K, V>> softReference = elements.get(key);
+        if (softReference != null)
+            return softReference.get();
         return null;
     }
 
