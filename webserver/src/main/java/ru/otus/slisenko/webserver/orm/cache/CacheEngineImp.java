@@ -1,15 +1,18 @@
 package ru.otus.slisenko.webserver.orm.cache;
 
+import ru.otus.slisenko.webserver.util.PropertiesHelper;
+
 import java.lang.ref.SoftReference;
 import java.util.*;
 import java.util.function.Function;
 
 public class CacheEngineImp<K, V> implements CacheEngine<K, V> {
     private static final int TIME_THRESHOLD_MS = 5;
-    public static final String MAX_ELEMENTS = "max_elements";
-    public static final String LIFE_TIME_MS = "life_time_ms";
-    public static final String IDLE_TIME_MS = "idle_time_ms";
-    public static final String IS_ETERNAL = "is_eternal";
+    private static final String CACHE_PROPERTIES_NAME = "cfg/cache.properties";
+    private static final String MAX_ELEMENTS = "max_elements";
+    private static final String LIFE_TIME_MS = "life_time_ms";
+    private static final String IDLE_TIME_MS = "idle_time_ms";
+    private static final String IS_ETERNAL = "is_eternal";
 
     private final int maxElements;
     private final long lifeTimeMs;
@@ -21,38 +24,13 @@ public class CacheEngineImp<K, V> implements CacheEngine<K, V> {
     private final Map<K, SoftReference<CacheElement<K, V>>> elements = new LinkedHashMap<>();
     private final Timer timer = new Timer();
 
-    public static class Builder<K, V> {
-        private int maxElements;
-        private long lifeTimeMS;
-        private long idleTimeMS;
-        private boolean isEternal;
+    public CacheEngineImp() {
+        Properties properties = PropertiesHelper.getProperties(CACHE_PROPERTIES_NAME);
+        int maxElements = Integer.valueOf(properties.getProperty(CacheEngineImp.MAX_ELEMENTS));
+        long lifeTimeMs = Long.valueOf(properties.getProperty(CacheEngineImp.LIFE_TIME_MS));
+        long idleTimeMs = Long.valueOf(properties.getProperty(CacheEngineImp.IDLE_TIME_MS));
+        boolean isEternal = Boolean.valueOf(properties.getProperty(CacheEngineImp.IS_ETERNAL));
 
-        public Builder<K, V> maxElements(int quantity) {
-            maxElements = quantity;
-            return this;
-        }
-
-        public Builder<K, V> lifeTimeMS(long ms) {
-            lifeTimeMS = ms;
-            return this;
-        }
-
-        public Builder<K, V> idleTimeMS(long ms) {
-            idleTimeMS = ms;
-            return this;
-        }
-
-        public Builder<K, V> isEternal(boolean flag) {
-            isEternal = flag;
-            return this;
-        }
-
-        public CacheEngine<K, V> build() {
-            return new CacheEngineImp<>(maxElements, lifeTimeMS, idleTimeMS, isEternal);
-        }
-    }
-
-    private CacheEngineImp(int maxElements, long lifeTimeMs, long idleTimeMs, boolean isEternal) {
         this.maxElements = maxElements;
         this.lifeTimeMs = lifeTimeMs > 0 ? lifeTimeMs : 0;
         this.idleTimeMs = idleTimeMs > 0 ? idleTimeMs : 0;

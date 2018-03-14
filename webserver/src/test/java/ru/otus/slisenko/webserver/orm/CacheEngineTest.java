@@ -18,12 +18,7 @@ public class CacheEngineTest {
 
     @Before
     public void init() {
-        cacheEngine = new CacheEngineImp.Builder<Long, UserDataSet>()
-                .maxElements(5)
-                .lifeTimeMS(500)
-                .idleTimeMS(0)
-                .isEternal(false)
-                .build();
+        cacheEngine = new CacheEngineImp<>();
         dbService = new DBServiceImp(cacheEngine);
         dbService.createTable();
     }

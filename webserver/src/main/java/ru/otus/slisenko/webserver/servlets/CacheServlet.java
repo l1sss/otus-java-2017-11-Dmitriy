@@ -1,6 +1,7 @@
 package ru.otus.slisenko.webserver.servlets;
 
 import ru.otus.slisenko.webserver.orm.cache.CacheEngine;
+import ru.otus.slisenko.webserver.util.ApplicationContextProvider;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +18,8 @@ public class CacheServlet extends HttpServlet {
     private static final int PERIOD_MS = 5000;
     private final CacheEngine cache;
 
-    public CacheServlet(CacheEngine cache) {
-        this.cache = cache;
+    public CacheServlet() {
+        cache = (CacheEngine) ApplicationContextProvider.getApplicationContext().getBean("cacheEngine");
     }
 
     @Override

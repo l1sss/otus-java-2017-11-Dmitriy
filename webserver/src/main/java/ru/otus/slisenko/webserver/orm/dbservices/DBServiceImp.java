@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Properties;
 
 public class DBServiceImp implements DBService {
-    private static final String CACHE_PROPERTIES_NAME = "cfg/cache.properties";
     private final Connection connection;
     private UsersDAO dao;
     private CacheEngine<Long, UserDataSet> cacheEngine;
@@ -22,18 +21,7 @@ public class DBServiceImp implements DBService {
     public DBServiceImp() {
         connection = ConnectionHelper.getConnection();
         dao = new UsersDAO(connection);
-
-        Properties cacheProperties = PropertiesHelper.getProperties(CACHE_PROPERTIES_NAME);
-        int maxElements = Integer.valueOf(cacheProperties.getProperty(CacheEngineImp.MAX_ELEMENTS));
-        long lifeTimeMS = Long.valueOf(cacheProperties.getProperty(CacheEngineImp.LIFE_TIME_MS));
-        long idleTimeMS = Long.valueOf(cacheProperties.getProperty(CacheEngineImp.IDLE_TIME_MS));
-        boolean isEternal = Boolean.valueOf(cacheProperties.getProperty(CacheEngineImp.IS_ETERNAL));
-        cacheEngine = new CacheEngineImp.Builder<Long, UserDataSet>()
-                .maxElements(maxElements)
-                .lifeTimeMS(lifeTimeMS)
-                .idleTimeMS(idleTimeMS)
-                .isEternal(isEternal)
-                .build();
+        cacheEngine = new CacheEngineImp<>();
     }
 
     public DBServiceImp(CacheEngine<Long, UserDataSet> cacheEngine) {
