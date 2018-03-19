@@ -1,8 +1,10 @@
 package ru.otus.slisenko.webserver.servlets;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.otus.slisenko.webserver.orm.cache.CacheEngine;
-import ru.otus.slisenko.webserver.util.ApplicationContextProvider;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +18,14 @@ public class CacheServlet extends HttpServlet {
     private static final String CACHE_PAGE_TEMPLATE = "cache.html";
     private static final String REFRESH_VARIABLE_NAME = "refreshPeriod";
     private static final int PERIOD_MS = 5000;
-    private final CacheEngine cache;
 
-    public CacheServlet() {
-        cache = (CacheEngine) ApplicationContextProvider.getApplicationContext().getBean("cacheEngine");
+    @Autowired
+    private CacheEngine cache;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
     @Override

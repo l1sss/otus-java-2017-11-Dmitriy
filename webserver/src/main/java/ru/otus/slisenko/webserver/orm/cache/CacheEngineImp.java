@@ -1,11 +1,13 @@
 package ru.otus.slisenko.webserver.orm.cache;
 
+import org.springframework.stereotype.Component;
 import ru.otus.slisenko.webserver.util.PropertiesHelper;
 
 import java.lang.ref.SoftReference;
 import java.util.*;
 import java.util.function.Function;
 
+@Component
 public class CacheEngineImp<K, V> implements CacheEngine<K, V> {
     private static final int TIME_THRESHOLD_MS = 5;
     private static final String CACHE_PROPERTIES_NAME = "cfg/cache.properties";
