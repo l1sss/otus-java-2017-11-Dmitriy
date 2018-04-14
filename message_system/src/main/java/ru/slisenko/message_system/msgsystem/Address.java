@@ -1,4 +1,4 @@
-package ru.slisenko.message_system.msgSystem;
+package ru.slisenko.message_system.msgsystem;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

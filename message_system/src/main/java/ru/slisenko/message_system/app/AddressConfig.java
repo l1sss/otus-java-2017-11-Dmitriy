@@ -2,7 +2,7 @@ package ru.slisenko.message_system.app;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.slisenko.message_system.msgSystem.Address;
+import ru.slisenko.message_system.msgsystem.Address;
 
 @Configuration
 public class AddressConfig {

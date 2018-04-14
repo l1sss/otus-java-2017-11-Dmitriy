@@ -3,8 +3,8 @@ package ru.slisenko.message_system.app;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import ru.slisenko.message_system.msgSystem.Address;
-import ru.slisenko.message_system.msgSystem.MessageSystem;
+import ru.slisenko.message_system.msgsystem.Address;
+import ru.slisenko.message_system.msgsystem.MessageSystem;
 
 /**
  * Created by tully.
@@ -17,7 +17,7 @@ public class MessageSystemContext {
     @Autowired @Qualifier("dbAddress")
     private Address dbAddress;
 
-    public MessageSystemContext(@Autowired @Qualifier("msgSystem") MessageSystem messageSystem) {
+    public MessageSystemContext(@Autowired @Qualifier("msgsystem") MessageSystem messageSystem) {
         this.messageSystem = messageSystem;
     }
 

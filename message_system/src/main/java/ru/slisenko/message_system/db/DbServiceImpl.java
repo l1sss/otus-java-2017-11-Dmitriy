@@ -7,8 +7,8 @@ import ru.slisenko.message_system.app.DataRepository;
 import ru.slisenko.message_system.app.DbService;
 import ru.slisenko.message_system.app.MessageSystemContext;
 import ru.slisenko.message_system.front.model.ChatMessage;
-import ru.slisenko.message_system.msgSystem.Address;
-import ru.slisenko.message_system.msgSystem.MessageSystem;
+import ru.slisenko.message_system.msgsystem.Address;
+import ru.slisenko.message_system.msgsystem.MessageSystem;
 
 import javax.annotation.PostConstruct;
 

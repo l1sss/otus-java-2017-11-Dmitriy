@@ -1,4 +1,4 @@
-package ru.slisenko.message_system.msgSystem;
+package ru.slisenko.message_system.msgsystem;
 
 /**
  * @author tully

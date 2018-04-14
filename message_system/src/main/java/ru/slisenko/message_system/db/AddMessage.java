@@ -3,7 +3,7 @@ package ru.slisenko.message_system.db;
 import ru.slisenko.message_system.app.DbService;
 import ru.slisenko.message_system.app.MsgToDb;
 import ru.slisenko.message_system.front.model.ChatMessage;
-import ru.slisenko.message_system.msgSystem.Address;
+import ru.slisenko.message_system.msgsystem.Address;
 
 public class AddMessage extends MsgToDb {
     private final ChatMessage chatMessage;

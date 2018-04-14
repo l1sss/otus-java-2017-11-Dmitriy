@@ -1,8 +1,8 @@
 package ru.slisenko.message_system.app;
 
-import ru.slisenko.message_system.msgSystem.Address;
-import ru.slisenko.message_system.msgSystem.Addressee;
-import ru.slisenko.message_system.msgSystem.Message;
+import ru.slisenko.message_system.msgsystem.Address;
+import ru.slisenko.message_system.msgsystem.Addressee;
+import ru.slisenko.message_system.msgsystem.Message;
 
 /**
  * Created by tully.
