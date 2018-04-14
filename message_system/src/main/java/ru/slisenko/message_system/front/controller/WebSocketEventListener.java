@@ -1,4 +1,4 @@
-package ru.slisenko.message_system.controller;
+package ru.slisenko.message_system.front.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-import ru.slisenko.message_system.model.ChatMessage;
+import ru.slisenko.message_system.front.model.ChatMessage;
 
 @Component
 public class WebSocketEventListener {

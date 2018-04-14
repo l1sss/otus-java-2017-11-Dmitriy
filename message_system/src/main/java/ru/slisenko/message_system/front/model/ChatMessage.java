@@ -1,10 +1,13 @@
-package ru.slisenko.message_system.model;
+package ru.slisenko.message_system.front.model;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "messages")
-public class ChatMessage extends DomainObject {
+public class ChatMessage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     @Transient
     private MessageType type;
     private String content;
