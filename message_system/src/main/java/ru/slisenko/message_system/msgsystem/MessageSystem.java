@@ -29,7 +29,6 @@ public final class MessageSystem {
     public void addAddressee(Addressee addressee) {
         addresseeMap.put(addressee.getAddress(), addressee);
         messagesMap.put(addressee.getAddress(), new ConcurrentLinkedQueue<>());
-        logger.info("into addAddressee addresseeMap: " + addresseeMap);
     }
 
     public void sendMessage(Message message) {
@@ -39,7 +38,6 @@ public final class MessageSystem {
     @PostProxy
     @SuppressWarnings("InfiniteLoopStatement")
     public void start() {
-        logger.info("into start addresseeMap: " + addresseeMap);
         for (Map.Entry<Address, Addressee> entry : addresseeMap.entrySet()) {
             String name = "MS-worker-" + entry.getKey().getId();
             Thread thread = new Thread(() -> {
