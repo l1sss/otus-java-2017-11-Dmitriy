@@ -15,6 +15,8 @@ import ru.slisenko.message_system.msgsystem.Address;
 import ru.slisenko.message_system.msgsystem.MessageSystem;
 
 import javax.annotation.PostConstruct;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -30,18 +32,6 @@ public class ChatController implements FrontendService {
     @PostConstruct
     public void init() {
         context.getMessageSystem().addAddressee(this);
-        //context.getMessageSystem().start();
-    }
-
-    @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-        context.getMessageSystem().sendMessage(new AddMessage(getAddress(), context.getDbAddress(), chatMessage));
-        try {
-            return queueForRender.take();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @MessageMapping("/chat.addUser")
@@ -49,6 +39,27 @@ public class ChatController implements FrontendService {
     public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
         return chatMessage;
+    }
+
+    @MessageMapping("/chat.sendMessage")
+    @SendTo("/topic/public")
+    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+        addDate(chatMessage);
+        return addChatMessageInMsgSystem(chatMessage);
+    }
+
+    private void addDate(ChatMessage chatMessage) {
+        String time = new SimpleDateFormat("HH:mm MMM yyyy").format(new Date());
+        chatMessage.setDate(time);
+    }
+
+    private ChatMessage addChatMessageInMsgSystem(ChatMessage chatMessage) {
+        context.getMessageSystem().sendMessage(new AddMessage(getAddress(), context.getDbAddress(), chatMessage));
+        try {
+            return queueForRender.take();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
