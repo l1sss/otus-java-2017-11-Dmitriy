@@ -15,6 +15,6 @@ public class AddMessageAnswer extends MsgToFrontend {
 
     @Override
     public void exec(FrontendService frontendService) {
-        frontendService.putChatMessageInQueueForRender(chatMessage);
+        frontendService.renderMessage(chatMessage);
     }
 }

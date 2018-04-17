@@ -7,5 +7,5 @@ public interface FrontendService extends Addressee {
 
     void init();
 
-    void putChatMessageInQueueForRender(ChatMessage chatMessage);
+    void renderMessage(ChatMessage chatMessage);
 }

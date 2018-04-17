@@ -6,6 +6,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import ru.slisenko.message_system.app.FrontendService;
 import ru.slisenko.message_system.app.MessageSystemContext;
@@ -17,16 +18,15 @@ import ru.slisenko.message_system.msgsystem.MessageSystem;
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 @Controller
 public class ChatController implements FrontendService {
-    private final BlockingQueue<ChatMessage> queueForRender = new LinkedBlockingQueue<>(10);
     @Autowired @Qualifier("msgSystemContext")
     private MessageSystemContext context;
     @Autowired @Qualifier("frontAddress")
     private Address address;
+    @Autowired
+    SimpMessagingTemplate messageForRender;
 
     @Override
     @PostConstruct
@@ -42,10 +42,9 @@ public class ChatController implements FrontendService {
     }
 
     @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+    public void sendMessage(@Payload ChatMessage chatMessage) {
         addDate(chatMessage);
-        return addChatMessageInMsgSystem(chatMessage);
+        context.getMessageSystem().sendMessage(new AddMessage(getAddress(), context.getDbAddress(), chatMessage));
     }
 
     private void addDate(ChatMessage chatMessage) {
@@ -53,22 +52,9 @@ public class ChatController implements FrontendService {
         chatMessage.setDate(time);
     }
 
-    private ChatMessage addChatMessageInMsgSystem(ChatMessage chatMessage) {
-        context.getMessageSystem().sendMessage(new AddMessage(getAddress(), context.getDbAddress(), chatMessage));
-        try {
-            return queueForRender.take();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
-    public void putChatMessageInQueueForRender(ChatMessage chatMessage) {
-        try {
-            queueForRender.put(chatMessage);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    public void renderMessage(ChatMessage chatMessage) {
+        messageForRender.convertAndSend("/topic/public", chatMessage);
     }
 
     @Override
