@@ -26,7 +26,7 @@ public class ChatController implements FrontendService {
     @Autowired @Qualifier("frontAddress")
     private Address address;
     @Autowired
-    SimpMessagingTemplate messageForRender;
+    private SimpMessagingTemplate messageForRender;
 
     @Override
     @PostConstruct
