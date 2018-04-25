@@ -36,13 +36,13 @@ public final class MessageSystem implements MessageSystemMBean {
 
     private final ExecutorService executor;
     private final List<MsgWorker> workers;
-    private final Map<Address, MsgWorker> addresses;
+    private final Map<Address, MsgWorker> clients;
     private final MessageSystemContext context;
 
     public MessageSystem() {
         executor = Executors.newFixedThreadPool(THREADS_NUMBER);
         workers = new CopyOnWriteArrayList<>();
-        addresses = new HashMap<>();
+        clients = new HashMap<>();
         context = new MessageSystemContext();
     }
 
@@ -71,20 +71,20 @@ public final class MessageSystem implements MessageSystemMBean {
                        Address sender = msg.getFrom();
                        logger.info("Ping message received from: " + sender);
                        context.setFrontAddress(sender);
-                       addresses.put(sender, worker);
+                       clients.put(sender, worker);
 
                        sendCurrentContextToAllAddresses();
                    } else if (msg.getClass().isAssignableFrom(DbPingMsg.class)) {
                        Address sender = msg.getFrom();
                        logger.info("Ping message received from: " + sender);
                        context.setDbAddress(sender);
-                       addresses.put(sender, worker);
+                       clients.put(sender, worker);
 
                        sendCurrentContextToAllAddresses();
                    } else {
                        Address destination = msg.getTo();
                        logger.info("Transit message to: " + destination);
-                       MsgWorker msgWorker = addresses.get(destination);
+                       MsgWorker msgWorker = clients.get(destination);
                        if (msgWorker != null) {
                            msgWorker.send(msg);
                        }
@@ -101,7 +101,7 @@ public final class MessageSystem implements MessageSystemMBean {
     }
 
     private void sendCurrentContextToAllAddresses() {
-        for (Map.Entry<Address, MsgWorker> entry : addresses.entrySet()) {
+        for (Map.Entry<Address, MsgWorker> entry : clients.entrySet()) {
             MsgWorker worker = entry.getValue();
             worker.send(new PingMsgAnswer(null, entry.getKey(), context));
         }
