@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,9 +32,11 @@ public class SocketMsgWorker implements MsgWorker {
 
     private final ExecutorService executor;
     private final Socket socket;
+    private final List<Runnable> shutdownRegistrations;
 
     public SocketMsgWorker(Socket socket) {
         this.socket = socket;
+        shutdownRegistrations = new ArrayList<>();
         executor = Executors.newFixedThreadPool(WORKERS_COUNT);
     }
 
@@ -53,8 +57,13 @@ public class SocketMsgWorker implements MsgWorker {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
+        shutdownRegistrations.forEach(Runnable::run);
+        shutdownRegistrations.clear();
+
         executor.shutdown();
+
+        logger.info("Client socket is closed");
     }
 
     public void init() {
@@ -62,15 +71,19 @@ public class SocketMsgWorker implements MsgWorker {
         executor.execute(this::receiveMessage);
     }
 
+    public void addShutdownRegistration(Runnable runnable) {
+        this.shutdownRegistrations.add(runnable);
+    }
+
     @Blocks
     private void sendMessage() {
         try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-           while(socket.isConnected()) {
-               Message msg = output.take(); //blocks
-               String json = new Gson().toJson(msg);
-               out.println(json);
-               out.println(); //line with json + an empty line
-           }
+            while (socket.isConnected()) {
+                Message msg = output.take(); //blocks
+                String json = new Gson().toJson(msg);
+                out.println(json);
+                out.println(); //end of the message
+            }
         } catch (IOException | InterruptedException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
@@ -85,23 +98,31 @@ public class SocketMsgWorker implements MsgWorker {
                 stringBuilder.append(inputLine);
                 if (inputLine.isEmpty()) { //empty line is the end of the message
                     String json = stringBuilder.toString();
+                    if (json.isEmpty())
+                        continue;
                     Message msg = getMsgFromJSON(json);
-                    input.add(msg);
+                    if (msg != null)
+                        input.add(msg);
                     stringBuilder = new StringBuilder();
                 }
             }
-        } catch (IOException | ParseException e) {
+        } catch (IOException | ClassNotFoundException e) {
             logger.log(Level.SEVERE, e.getMessage());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } finally {
+            close();
         }
     }
 
-    private static Message getMsgFromJSON(String json) throws ParseException, ClassNotFoundException {
-        JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
-        String className = (String) jsonObject.get(Message.CLASS_NAME_VARIABLE);
-        Class<?> msgClass = Class.forName(className);
-        return (Message) new Gson().fromJson(json, msgClass);
+    private static Message getMsgFromJSON(String json) throws ClassNotFoundException {
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
+            String className = (String) jsonObject.get(Message.CLASS_NAME_VARIABLE);
+            Class<?> msgClass = Class.forName(className);
+            return (Message) new Gson().fromJson(json, msgClass);
+        } catch (ParseException e) {
+            logger.log(Level.SEVERE, "Parsing error: " + e.getMessage());
+            return null;
+        }
     }
 }

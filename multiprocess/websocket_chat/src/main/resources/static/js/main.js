@@ -26,12 +26,13 @@ function connect(event) {
         var socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
 
-        stompClient.connect({}, onConnected, onError);
+        stompClient.connect({name: username}, onConnected, onError);
     }
     event.preventDefault();
 }
 
 function onConnected() {
+    stompClient.subscribe('/user/queue/reply', onLoadHistory);
     stompClient.subscribe('/topic/public', onMessageReceived);
 
     stompClient.send("/app/chat.addUser",
@@ -61,6 +62,15 @@ function sendMessage(event) {
     event.preventDefault();
 }
 
+function onLoadHistory(payload) {
+    var messages = JSON.parse(payload.body);
+    messages.forEach(function(entry) {
+        var messageElement = document.createElement('li');
+        buildMessage(messageElement, entry);
+        renderMessage(messageElement, entry);
+    });
+}
+
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
 
@@ -73,21 +83,29 @@ function onMessageReceived(payload) {
         messageElement.classList.add('event-message');
         message.content = message.sender + ' left!';
     } else {
-        messageElement.classList.add('chat-message');
-
-        var avatarElement = document.createElement('i');
-        var avatarText = document.createTextNode(message.sender[0]);
-        avatarElement.appendChild(avatarText);
-        avatarElement.style['background-color'] = getAvatarColor(message.sender);
-
-        messageElement.appendChild(avatarElement);
-
-        var usernameElement = document.createElement('span');
-        var usernameText = document.createTextNode(message.sender);
-        usernameElement.appendChild(usernameText);
-        messageElement.appendChild(usernameElement);
+        buildMessage(messageElement, message);
     }
 
+    renderMessage(messageElement, message);
+}
+
+function buildMessage(messageElement, message) {
+    messageElement.classList.add('chat-message');
+
+    var avatarElement = document.createElement('i');
+    var avatarText = document.createTextNode(message.sender[0]);
+    avatarElement.appendChild(avatarText);
+    avatarElement.style['background-color'] = getAvatarColor(message.sender);
+
+    messageElement.appendChild(avatarElement);
+
+    var usernameElement = document.createElement('span');
+    var usernameText = document.createTextNode(message.sender);
+    usernameElement.appendChild(usernameText);
+    messageElement.appendChild(usernameElement);
+}
+
+function renderMessage(messageElement, message) {
     var textElement = document.createElement('p');
     var messageText = document.createTextNode(message.content);
     textElement.appendChild(messageText);

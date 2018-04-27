@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -16,6 +15,7 @@ import ru.otus.slisenko.message_server.app.MsgWorker;
 import ru.otus.slisenko.message_server.channel.SocketMsgWorker;
 import ru.otus.slisenko.message_server.messages.AddMessage;
 import ru.otus.slisenko.message_server.messages.FrontPingMsg;
+import ru.otus.slisenko.message_server.messages.LoadHistory;
 import ru.otus.slisenko.message_server.model.ChatMessage;
 import ru.otus.slisenko.message_server.msgsystem.Address;
 import ru.otus.slisenko.message_server.msgsystem.Message;
@@ -23,6 +23,7 @@ import ru.otus.slisenko.message_server.msgsystem.Message;
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -62,12 +63,11 @@ public class ChatController implements FrontendService {
     }
 
     @MessageMapping("/chat.addUser")
-    @SendTo("/topic/public")
-    public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+    public void addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
         String username = chatMessage.getSender();
         headerAccessor.getSessionAttributes().put("username", username);
+        socketMsgWorker.send(new LoadHistory(getAddress(), context.getDbAddress(), username));
         logger.info(username + " joined");
-        return chatMessage;
     }
 
     @MessageMapping("/chat.sendMessage")
@@ -84,6 +84,21 @@ public class ChatController implements FrontendService {
     @Override
     public void renderMessage(ChatMessage chatMessage) {
         messageForRender.convertAndSend("/topic/public", chatMessage);
+    }
+
+    @Override
+    public void renderHistory(String username, List<ChatMessage> history) {
+        messageForRender.convertAndSendToUser(username,"/queue/reply", history);
+
+        buildJoinMessage(username);
+    }
+
+    private void buildJoinMessage(String username) {
+        ChatMessage joinMessage = new ChatMessage();
+        joinMessage.setSender(username);
+        joinMessage.setType(ChatMessage.MessageType.JOIN);
+
+        renderMessage(joinMessage);
     }
 
     @Override

@@ -14,6 +14,7 @@ import ru.otus.slisenko.message_server.util.PropertiesHelper;
 import java.io.IOException;
 import java.net.Socket;
 import java.sql.Connection;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -74,6 +75,11 @@ public class DbServiceImpl implements DbService {
     public ChatMessage save(ChatMessage chatMessage) {
         long id = dao.save(chatMessage);
         return dao.load(id);
+    }
+
+    @Override
+    public List<ChatMessage> readAll() {
+        return dao.loadAll();
     }
 
     @Override
