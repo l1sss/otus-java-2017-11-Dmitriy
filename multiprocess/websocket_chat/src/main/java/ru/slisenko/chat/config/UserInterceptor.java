@@ -1,4 +1,4 @@
-package ru.slisenko.chat.controller.user;
+package ru.slisenko.chat.config;
 
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
