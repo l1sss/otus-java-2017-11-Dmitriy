@@ -63,9 +63,8 @@ public class ChatController implements FrontendService {
     }
 
     @MessageMapping("/chat.addUser")
-    public void addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-        String username = chatMessage.getSender();
-        headerAccessor.getSessionAttributes().put("username", username);
+    public void addUser(SimpMessageHeaderAccessor accessor) {
+        String username = accessor.getUser().getName();
         socketMsgWorker.send(new LoadHistory(getAddress(), context.getDbAddress(), username));
         logger.info(username + " joined");
     }
@@ -90,10 +89,10 @@ public class ChatController implements FrontendService {
     public void renderHistory(String username, List<ChatMessage> history) {
         messageForRender.convertAndSendToUser(username,"/queue/reply", history);
 
-        buildJoinMessage(username);
+        sendJoinMessage(username);
     }
 
-    private void buildJoinMessage(String username) {
+    private void sendJoinMessage(String username) {
         ChatMessage joinMessage = new ChatMessage();
         joinMessage.setSender(username);
         joinMessage.setType(ChatMessage.MessageType.JOIN);

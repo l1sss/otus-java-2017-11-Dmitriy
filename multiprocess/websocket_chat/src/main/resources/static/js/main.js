@@ -35,10 +35,7 @@ function onConnected() {
     stompClient.subscribe('/user/queue/reply', onLoadHistory);
     stompClient.subscribe('/topic/public', onMessageReceived);
 
-    stompClient.send("/app/chat.addUser",
-        {},
-        JSON.stringify({sender: username, type: 'JOIN'})
-    )
+    stompClient.send("/app/chat.addUser", {}, "");
 
     connectingElement.classList.add('hidden');
 }
