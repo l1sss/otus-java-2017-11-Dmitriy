@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -42,7 +43,7 @@ public final class MessageSystem implements MessageSystemMBean {
     public MessageSystem() {
         executor = Executors.newFixedThreadPool(THREADS_NUMBER);
         workers = new CopyOnWriteArrayList<>();
-        clients = new HashMap<>();
+        clients = new ConcurrentHashMap<>();
         context = new MessageSystemContext();
     }
 
