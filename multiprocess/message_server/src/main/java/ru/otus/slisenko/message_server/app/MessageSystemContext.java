@@ -21,4 +21,12 @@ public class MessageSystemContext {
     public void setDbAddress(Address dbAddress) {
         this.dbAddress = dbAddress;
     }
+
+    @Override
+    public String toString() {
+        return "MessageSystemContext{" +
+                "frontAddress=" + frontAddress +
+                ", dbAddress=" + dbAddress +
+                '}';
+    }
 }

@@ -101,5 +101,6 @@ public class DbServiceImpl implements DbService {
     @Override
     public void setContext(MessageSystemContext messageSystemContext) {
         context = messageSystemContext;
+        logger.info("Set new front address: " + context.getFrontAddress());
     }
 }
