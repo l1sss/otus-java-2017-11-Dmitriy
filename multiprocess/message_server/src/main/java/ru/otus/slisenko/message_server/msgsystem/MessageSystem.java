@@ -57,7 +57,10 @@ public final class MessageSystem implements MessageSystemMBean {
                 Socket socket = serverSocket.accept(); //blocks
                 SocketMsgWorker worker = new SocketMsgWorker(socket);
                 worker.init();
-                worker.addShutdownRegistration(() -> workers.remove(worker));
+                worker.addShutdownRegistration(() -> {
+                    workers.remove(worker);
+                    clients.values().remove(worker);
+                });
                 workers.add(worker);
             }
         }
