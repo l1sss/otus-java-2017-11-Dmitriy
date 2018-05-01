@@ -10,22 +10,13 @@ public class ExecutorImpl implements Executor {
     }
 
     @Override
-    public long execInsert(String insert) {
+    public long execUpdate(String insert, ExecuteHandler prepare) {
         try (PreparedStatement statement = connection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
+            prepare.accept(statement);
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next();
             return resultSet.getLong(1);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public int execUpdate(String update) {
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(update);
-            return statement.getUpdateCount();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

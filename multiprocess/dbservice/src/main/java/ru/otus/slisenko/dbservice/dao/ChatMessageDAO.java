@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatMessageDAO {
-    private static final String INSERT_QUERY = "INSERT INTO messages(content, date, sender) VALUES('%s', '%s', '%s');";
+    private static final String INSERT_QUERY = "INSERT INTO messages(content, date, sender) VALUES(?, ?, ?)";
     private static final String SELECT_BY_ID = "SELECT * FROM messages WHERE id=%s;";
     private static final String SELECT_ALL = "SELECT * FROM messages;";
 
@@ -22,9 +22,11 @@ public class ChatMessageDAO {
     }
 
     public long save(ChatMessage chatMessage) {
-        String insert = String.format(INSERT_QUERY,
-                chatMessage.getContent(), chatMessage.getDate(), chatMessage.getSender());
-        return executor.execInsert(insert);
+        return executor.execUpdate(INSERT_QUERY, statement -> {
+           statement.setString(1, chatMessage.getContent());
+           statement.setString(2, chatMessage.getDate());
+           statement.setString(3, chatMessage.getSender());
+        });
     }
 
     public ChatMessage load(long id) {
